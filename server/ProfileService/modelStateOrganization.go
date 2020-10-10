@@ -70,7 +70,7 @@ func (u *ProfileStateOrganization) createProfileStateOrganization(db *sqlx.DB) e
 			Profile_Name			,
 			Profile_Sigla			,
 			Profile_Political_Type	,
-			Profile_Fase				,
+			Profile_Fase			,
 			Profile_Twitter_Id		, 
 			Profile_Facebook_Id		,
 			Profile_Instagram_Id	,
