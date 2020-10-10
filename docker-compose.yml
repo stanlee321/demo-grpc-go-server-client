@@ -1,0 +1,51 @@
+version: '2.1'
+
+services:
+  ######################
+  # USER DOMAIN SERVICES
+  ######################
+  profile-service-db:
+    container_name: profile-service-db
+    build: ./server/ProfileService/db
+    ports:
+      - 5435:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+        - db_vol:/var/lib/postgresql/data
+    healthcheck:
+      test: exit 0
+      
+  # profile Services
+  profile-service:
+    image: profile-service
+    build: ./server/ProfileService
+    ports:
+      - 50051:50051
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@profile-service-db:5432/profiles_prod?sslmode=disable
+      - DATABASE_DEV_URL=postgres://postgres:postgres@profile-service-db:5432/profiles_dev?sslmode=disable
+      - DATABASE_TEST_URL=postgres://postgres:postgres@profile-service-db:5432/profiles_test?sslmode=disable
+    depends_on:
+      profile-service-db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    links:
+      - profile-service-db
+    healthcheck:
+      test: exit 0
+
+   # proxy:
+  #   container_name: userservice_loadbalance
+  #   build: ./nginx
+  #   ports:
+  #     - "80:80"
+  #   links:
+  #     - userservice
+
+volumes:
+    db_vol:
+      external:
+        name: profile-service-db

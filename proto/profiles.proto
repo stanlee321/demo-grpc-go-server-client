@@ -1,0 +1,264 @@
+syntax = "proto3";
+
+package Profile;
+
+//option go_package = "registerpb";
+option go_package = ".;Profilepb";
+
+
+// Define Schemas
+service ProfileService {
+
+    // Political Party
+    rpc CreateProfilePoliticalParty (CreateProfilePoliticalPartyRequest) returns (CreateProfilePoliticalPartyResponse);
+    rpc ReadProfilePoliticalPartyByID (ReadProfilePoliticalPartyByIdRequest) returns (ReadProfilePoliticalPartyByIdResponse); // return NOT_FOUND if not found
+    rpc UpdateProfilePoliticalParty (UpdateProfilePoliticalPartyRequest) returns (UpdateProfilePoliticalPartyResponse); // return NOT_FOUND if not found
+    rpc DeleteProfilePoliticalParty (DeleteProfilePoliticalPartyRequest) returns (DeleteProfilePoliticalPartyResponse); // return NOT_FOUND if not found
+    rpc ListProfilePoliticalParty (ListProfilePoliticalPartyRequest) returns (stream ListProfilePoliticalPartyResponse);
+    rpc ListProfilePoliticalPartyByType (ListProfilePoliticalPartyByTypeRequest) returns (stream ListProfilePoliticalPartyByTypeResponse);
+
+    // ProfileStateOrganization
+    rpc CreateProfileStateOrganization (CreateProfileStateOrganizationRequest) returns (CreateProfileStateOrganizationResponse);
+    rpc ReadProfileStateOrganizationByID (ReadProfileStateOrganizationByIdRequest) returns (ReadProfileStateOrganizationByIdResponse); // return NOT_FOUND if not found
+    rpc UpdateProfileStateOrganization (UpdateProfileStateOrganizationRequest) returns (UpdateProfileStateOrganizationResponse); // return NOT_FOUND if not found
+    rpc DeleteProfileStateOrganization (DeleteProfileStateOrganizationRequest) returns (DeleteProfileStateOrganizationResponse); // return NOT_FOUND if not found
+    rpc ListProfileStateOrganization (ListProfileStateOrganizationRequest) returns (stream ListProfileStateOrganizationResponse);
+    rpc ListProfileStateOrganizationByType (ListProfileStateOrganizationByTypeRequest) returns (stream ListProfileStateOrganizationByTypeResponse);
+    
+    // Profile People
+    rpc CreateProfilePeople (CreateProfilePeopleRequest) returns (CreateProfilePeopleResponse);
+    rpc ReadProfilePeopleByID (ReadProfilePeopleByIdRequest) returns (ReadProfilePeopleByIdResponse); // return NOT_FOUND if not found
+    rpc UpdateProfilePeople (UpdateProfilePeopleRequest) returns (UpdateProfilePeopleResponse); // return NOT_FOUND if not found
+    rpc DeleteProfilePeople (DeleteProfilePeopleRequest) returns (DeleteProfilePeopleResponse); // return NOT_FOUND if not found
+    rpc ListProfilePeople (ListProfilePeopleRequest) returns (stream ListProfilePeopleResponse);
+    rpc ListProfilePeopleByKind (ListProfilePeopleByKindRequest) returns (stream ListProfilePeopleByKindResponse);
+    
+}
+
+
+// Profile Political Party
+message ProfilePoliticalParty {
+    int32 id                            = 1; 
+    string profilePoliticalName         = 2;
+    string profilePoliticalSigla        = 3;
+    string profilePoliticalType         = 4;
+    int32 profilePoliticalTwitterId     = 5;
+    int32 profilePoliticalFacebookID    = 6;
+    int32 profilePoliticalInstagramID   = 7;
+    int32 profilePoliticalYoutubeID     = 8;
+    int32 profilePoliticalTikTokID      = 9;
+    string createdAt                    = 10;
+    string updatedAt                    = 11;
+}
+
+// Profile State Organization
+message ProfileStateOrganization {
+    int32 id                            = 1;
+    string profileName                   = 2;
+    string profileSigla                 = 3;
+    string profilePoliticalType         = 4;
+    string profileFase                  = 5;
+    int32 profileTwitterId              = 6;
+    int32 profileFacebookId             = 7;
+    int32 profileInstagramId            = 8;
+    int32 profileYoutubeId              = 9;
+    int32 profileTikTokId               = 10;
+    string createdAt                    = 11;
+    string updatedAt                    = 12;
+}
+
+
+
+// Profile People
+message ProfilePeople {
+    int32 id                            = 1;
+    string profileFirstName              = 2;
+    string profileLastName              = 3;
+    string profileOrientation           = 4;
+    string profileKind                  = 5;
+    int32 profileTwitterId              = 6;
+    int32 profileFacebookId             = 7;
+    int32 profileInstagramId            = 8;
+    int32 profileYoutubeId              = 9;
+    int32 profileTikTokId               = 10;
+    string createdAt                    = 11;
+    string updatedAt                    = 12;
+}
+
+// Create a new Profile
+message CreateProfilePoliticalPartyRequest {
+    ProfilePoliticalParty Profile = 1;
+}
+
+// returns a Profile with new ID field
+message CreateProfilePoliticalPartyResponse {
+    ProfilePoliticalParty Profile = 1; // will have a blog id
+}
+
+// Read a Profile bu Profile_id as input (int32)
+message ReadProfilePoliticalPartyByIdRequest {
+    int32 id = 1;
+}
+// Read a Profile bu Profile_id as input (int32)
+message ReadProfilePoliticalPartyByIdResponse {
+    ProfilePoliticalParty Profile = 1;
+}
+
+
+// Update a Profile by a new Profile as input
+message UpdateProfilePoliticalPartyRequest {
+    ProfilePoliticalParty Profile = 1;
+}
+
+// Returns the update Profiles
+message UpdateProfilePoliticalPartyResponse {
+    ProfilePoliticalParty Profile = 1;
+}
+
+message DeleteProfilePoliticalPartyRequest {
+    int32 id = 1;
+}
+
+message DeleteProfilePoliticalPartyResponse {
+    int32 id = 1;
+}
+
+message ListProfilePoliticalPartyRequest {
+    int32 count = 1;
+    int32 start = 2;
+}
+
+message ListProfilePoliticalPartyResponse {
+    ProfilePoliticalParty Profile = 1;
+}
+
+// Custom 1
+message ListProfilePoliticalPartyByTypeRequest {
+    string profileType = 1;
+    int32 count = 2;
+    int32 start = 3;
+}
+
+message ListProfilePoliticalPartyByTypeResponse {
+    ProfilePoliticalParty Profile = 1;
+}
+
+// Messages ProfileStateOrganization
+
+// Create a new Profile
+message CreateProfileStateOrganizationRequest {
+    ProfileStateOrganization Profile = 1;
+}
+
+// returns a Profile with new ID field
+message CreateProfileStateOrganizationResponse {
+    ProfileStateOrganization Profile = 1; // will have a blog id
+}
+
+// Read a Profile bu Profile_id as input (int32)
+message ReadProfileStateOrganizationByIdRequest {
+    int32 id = 1;
+}
+// Read a Profile bu Profile_id as input (int32)
+message ReadProfileStateOrganizationByIdResponse {
+    ProfileStateOrganization Profile = 1;
+}
+
+
+// Update a Profile by a new Profile as input
+message UpdateProfileStateOrganizationRequest {
+    ProfileStateOrganization Profile = 1;
+}
+
+// Returns the update Profiles
+message UpdateProfileStateOrganizationResponse {
+    ProfileStateOrganization Profile = 1;
+}
+
+message DeleteProfileStateOrganizationRequest {
+    int32 id = 1;
+}
+
+message DeleteProfileStateOrganizationResponse {
+    int32 id = 1;
+}
+
+message ListProfileStateOrganizationRequest {
+    int32 count = 1;
+    int32 start = 2;
+}
+
+message ListProfileStateOrganizationResponse {
+    ProfileStateOrganization Profile = 1;
+}
+
+// Custom 1
+message ListProfileStateOrganizationByTypeRequest {
+    string profileType = 1;
+    int32 count = 2;
+    int32 start = 3;
+}
+
+message ListProfileStateOrganizationByTypeResponse {
+    ProfileStateOrganization Profile = 1;
+}
+
+// Messages ProfilePeople
+
+// Create a new Profile
+message CreateProfilePeopleRequest {
+    ProfilePeople Profile = 1;
+}
+
+// returns a Profile with new ID field
+message CreateProfilePeopleResponse {
+    ProfilePeople Profile = 1; // will have a blog id
+}
+
+// Read a Profile bu Profile_id as input (int32)
+message ReadProfilePeopleByIdRequest {
+    int32 id = 1;
+}
+// Read a Profile bu Profile_id as input (int32)
+message ReadProfilePeopleByIdResponse {
+    ProfilePeople Profile = 1;
+}
+
+
+// Update a Profile by a new Profile as input
+message UpdateProfilePeopleRequest {
+    ProfilePeople Profile = 1;
+}
+
+// Returns the update Profiles
+message UpdateProfilePeopleResponse {
+    ProfilePeople Profile = 1;
+}
+
+message DeleteProfilePeopleRequest {
+    int32 id = 1;
+}
+
+message DeleteProfilePeopleResponse {
+    int32 id = 1;
+}
+
+message ListProfilePeopleRequest {
+    int32 count = 1;
+    int32 start = 2;
+}
+
+message ListProfilePeopleResponse {
+    ProfilePeople Profile = 1;
+}
+
+// Custom 1
+message ListProfilePeopleByKindRequest {
+    string profileKind = 1;
+    int32 count = 2;
+    int32 start = 3;
+}
+
+message ListProfilePeopleByKindResponse {
+    ProfilePeople Profile = 1;
+}
