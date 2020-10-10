@@ -6,16 +6,16 @@ import (
 
 // ProfileStateOrganization is the struct resposible to represent the database entity
 type ProfileStateOrganization struct {
-	ID                   int32  `bson:"Profile_State_Organization_Id" db:"Profile_State_Organization_Id"`
-	ProfileName          string `bson:"Profile_Name" db:"Profile_Name"`
-	ProfileSigla         string `bson:"Profile_Sigla" db:"Profile_Sigla"`
-	ProfilePoliticalType string `bson:"Profile_Political_Type" db:"Profile_Political_Type"`
-	ProfileFase          string `bson:"Profile_Fase" db:"Profile_Fase"`
-	ProfileTwitterID     int32  `bson:"Profile_Twitter_Id" db:"Profile_Twitter_Id"`
-	ProfileFacebookID    int32  `bson:"Profile_Facebook_Id" db:"Profile_Facebook_Id"`
-	ProfileInstagramID   int32  `bson:"Profile_Instagram_Id" db:"Profile_Instagram_Id"`
-	ProfileYoutubeID     int32  `bson:"Profile_Youtube_Id" db:"Profile_Youtube_Id"`
-	ProfileTikTokID      int32  `bson:"Profile_TikTok_Id" db:"Profile_TikTok_Id"`
+	ID                   int32  `bson:"id" db:"id"`
+	ProfileName          string `bson:"profile_name" db:"profile_name"`
+	ProfileSigla         string `bson:"profile_sigla" db:"profile_sigla"`
+	ProfilePoliticalType string `bson:"profile_political_type" db:"profile_political_type"`
+	ProfileFase          string `bson:"profile_fase" db:"profile_fase"`
+	ProfileTwitterID     int32  `bson:"profile_twitter_id" db:"profile_twitter_id"`
+	ProfileFacebookID    int32  `bson:"profile_facebook_id" db:"profile_facebook_id"`
+	ProfileInstagramID   int32  `bson:"profile_instagram_id" db:"profile_instagram_id"`
+	ProfileYoutubeID     int32  `bson:"profile_youtube_id" db:"profile_youtube_id"`
+	ProfileTikTokID      int32  `bson:"profile_tiktok_id" db:"profile_tiktok_id"`
 	CreatedAt            string `bson:"created_at" db:"created_at"`
 	UpdatedAt            string `bson:"updated_at" db:"updated_at"`
 }
@@ -32,13 +32,13 @@ func (u *ProfileStateOrganization) updateProfileStateOrganization(db *sqlx.DB) e
 										Profile_Name				=$1,
 										Profile_Sigla				=$2,
 										Profile_Political_Type		=$3,
-										Profile_Twitter_Id		=$4, 
-										Profile_Facebook_Id		=$5,
-										Profile_Instagram_Id	=$6,
-										Profile_Youtube_Id		=$7,
-										Profile_TikTok_Id		=$8,
-										password				=$9,
-			WHERE Profile_State_Organization_Id=$10`,
+										Profile_Fase				=$4,
+										Profile_Twitter_Id			=$5, 
+										Profile_Facebook_Id			=$6,
+										Profile_Instagram_Id		=$7,
+										Profile_Youtube_Id			=$8,
+										Profile_TikTok_Id			=$9
+			WHERE Id=$10`,
 		u.ProfileName,
 		u.ProfileSigla,
 		u.ProfilePoliticalType,
@@ -66,20 +66,20 @@ func (u *ProfileStateOrganization) createProfileStateOrganization(db *sqlx.DB) e
 
 	return db.QueryRow(
 		`INSERT INTO ProfileStateOrganization(
-			Profile_State_Organization_Id, 
+
 			Profile_Name			,
 			Profile_Sigla			,
 			Profile_Political_Type	,
+			Profile_Fase				,
 			Profile_Twitter_Id		, 
 			Profile_Facebook_Id		,
 			Profile_Instagram_Id	,
 			Profile_Youtube_Id		,
-			Profile_TikTok_Id		,
-			password				,
+			Profile_TikTok_Id		
 		) 
 	
-		VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING Profile_State_Organization_Id`,
-		u.ID,
+		VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING Id`,
+
 		u.ProfileName,
 		u.ProfileSigla,
 		u.ProfilePoliticalType,

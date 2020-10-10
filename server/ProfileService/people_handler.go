@@ -9,7 +9,6 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/getsentry/sentry-go"
 )
 
 func (handler *userDataHandler) CreateProfilePeople(ctx context.Context, req *profiles_pb.CreateProfilePeopleRequest) (*profiles_pb.CreateProfilePeopleResponse, error) {
@@ -29,8 +28,6 @@ func (handler *userDataHandler) CreateProfilePeople(ctx context.Context, req *pr
 		ProfileYoutubeID:   user.GetProfileYoutubeId(),
 		ProfileTikTokID:    user.GetProfileTikTokId(),
 	}
-
-	handler.app.DB.Get(&data.ID, "SELECT nextval('ProfilePeople_Profile_People_Id_seq')")
 
 	err := data.createProfilePeople(handler.app.DB)
 	if err != nil {

@@ -6,36 +6,36 @@ import (
 
 // ProfilePoliticalParty is the struct resposible to represent the database entity
 type ProfilePoliticalParty struct {
-	ID                          int32  `bson:"Profile_Political_Party_Id" db:"Profile_Political_Party_Id"`
-	ProfilePoliticalName        string `bson:"Profile_Political_Name" db:"Profile_Political_Name"`
-	ProfilePoliticalSigla       string `bson:"Profile_Political_Sigla" db:"Profile_Political_Sigla"`
-	ProfilePoliticalType        string `bson:"Profile_Political_Type" db:"Profile_Political_Type"`
-	ProfilePoliticalTwitterID   int32  `bson:"Profile_Political_Twitter_Id" db:"Profile_Political_Twitter_Id"`
-	ProfilePoliticalFacebookID  int32  `bson:"Profile_Political_Facebook_Id" db:"Profile_Political_Facebook_Id"`
-	ProfilePoliticalInstagramID int32  `bson:"Profile_Political_Instagram_Id" db:"Profile_Political_Instagram_Id"`
-	ProfilePoliticalYoutubeID   int32  `bson:"Profile_Political_Youtube_Id" db:"Profile_Political_Youtube_Id"`
-	ProfilePoliticalTikTokID    int32  `bson:"Profile_Political_TikTok_Id" db:"Profile_Political_TikTok_Id"`
+	ID                          int32  `bson:"id" db:"id"`
+	ProfilePoliticalName        string `bson:"profile_political_name" db:"profile_political_name"`
+	ProfilePoliticalSigla       string `bson:"profile_political_sigla" db:"profile_political_sigla"`
+	ProfilePoliticalType        string `bson:"profile_political_type" db:"profile_political_type"`
+	ProfilePoliticalTwitterID   int32  `bson:"profile_political_twitter_id" db:"profile_political_twitter_id"`
+	ProfilePoliticalFacebookID  int32  `bson:"profile_political_facebook_id" db:"profile_political_facebook_id"`
+	ProfilePoliticalInstagramID int32  `bson:"profile_political_instagram_id" db:"profile_political_instagram_id"`
+	ProfilePoliticalYoutubeID   int32  `bson:"profile_political_youtube_id" db:"profile_political_youtube_id"`
+	ProfilePoliticalTikTokID    int32  `bson:"profile_political_tiktok_id" db:"profile_political_tiktok_id"`
 	CreatedAt                   string `bson:"created_at" db:"created_at"`
 	UpdatedAt                   string `bson:"updated_at" db:"updated_at"`
 }
 
-func (u *ProfilePoliticalParty) getProfilePoliticalPartyByUserID(db *sqlx.DB) error {
-	return db.Get(u, "SELECT * FROM ProfilePolitcalParty WHERE Id=$1", u.ID)
+func (u *ProfilePoliticalParty) getPoliticalPartyByID(db *sqlx.DB) error {
+	return db.Get(u, `SELECT * FROM ProfilePoliticalParty WHERE Id=$1`, u.ID)
 }
 
 // Update the data in the db using the instance values
 func (u *ProfilePoliticalParty) updatePolitcalParty(db *sqlx.DB) error {
 
 	_, err := db.Exec(`UPDATE ProfilePoliticalParty SET 
-										Profile_Political_Name		=$1,
-										Profile_Political_Sigla		=$2,
-										Profile_Political_Type 		=$3
-										Profile_Twitter_Id		=$4, 
-										Profile_Facebook_Id		=$5,
-										Profile_Instagram_Id	=$6,
-										Profile_Youtube_Id		=$7,
-										Profile_TikTok_Id		=$8,
-			WHERE Profile_Political_Party_Id=$9`,
+										Profile_Political_Name				= $1,
+										Profile_Political_Sigla				= $2,
+										Profile_Political_Type 				= $3,
+										Profile_Political_Twitter_Id		= $4, 
+										Profile_Political_Facebook_Id		= $5,
+										Profile_Political_Instagram_Id		= $6,
+										Profile_Political_Youtube_Id		= $7,
+										Profile_Political_TikTok_Id			= $8
+			WHERE Id=$9`,
 		u.ProfilePoliticalName,
 		u.ProfilePoliticalSigla,
 		u.ProfilePoliticalType,
@@ -52,7 +52,7 @@ func (u *ProfilePoliticalParty) updatePolitcalParty(db *sqlx.DB) error {
 func (u *ProfilePoliticalParty) deletePoliticalParty(db *sqlx.DB) error {
 
 	// create query
-	_, err := db.Exec(`DELETE FROM ProfilePoliticalParty WHERE Profile_Political_Party_Id=$1`, u.ID)
+	_, err := db.Exec(`DELETE FROM ProfilePoliticalParty WHERE Id=$1`, u.ID)
 
 	return err
 }
@@ -62,19 +62,17 @@ func (u *ProfilePoliticalParty) createPoliticalParty(db *sqlx.DB) error {
 
 	return db.QueryRow(
 		`INSERT INTO ProfilePoliticalParty(
-			Profile_Political_Party_Id, 
 			Profile_Political_Name,
 			Profile_Political_Sigla,
 			Profile_Political_Type,
-			Profile_Twitter_Id,,
-			Profile_Facebook_Id,
-			Profile_Instagram_Id,
-			Profile_Youtube_Id,
-			Profile_TikTok_Id,
+			Profile_Political_Twitter_Id,
+			Profile_Political_Facebook_Id,
+			Profile_Political_Instagram_Id,
+			Profile_Political_Youtube_Id,
+			Profile_Political_TikTok_Id
 		) 
 	
-		VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING Profile_Political_Party_Id`,
-		u.ID,
+		VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING Id`,
 		u.ProfilePoliticalName,
 		u.ProfilePoliticalSigla,
 		u.ProfilePoliticalType,

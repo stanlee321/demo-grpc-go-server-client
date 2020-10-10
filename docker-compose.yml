@@ -12,8 +12,8 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-    volumes:
-        - db_vol:/var/lib/postgresql/data
+    # volumes:
+    #     - db_vol:/var/lib/postgresql/data
     healthcheck:
       test: exit 0
       
@@ -30,8 +30,6 @@ services:
     depends_on:
       profile-service-db:
         condition: service_healthy
-      redis:
-        condition: service_healthy
     links:
       - profile-service-db
     healthcheck:
@@ -45,7 +43,7 @@ services:
   #   links:
   #     - userservice
 
-volumes:
-    db_vol:
-      external:
-        name: profile-service-db
+# volumes:
+#     db_vol:
+#       external:
+#         name: profile-service-db

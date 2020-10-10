@@ -4,13 +4,11 @@ import (
 	profiles_pb "github.com/stanlee321/demo-grpc-go-server-client/proto"
 	"context"
 	"database/sql"
-	"encoding/json"
 	"fmt"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/getsentry/sentry-go"
 )
 
 func (handler *userDataHandler) CreateProfilePoliticalParty(ctx context.Context, req *profiles_pb.CreateProfilePoliticalPartyRequest) (*profiles_pb.CreateProfilePoliticalPartyResponse, error) {
@@ -19,7 +17,6 @@ func (handler *userDataHandler) CreateProfilePoliticalParty(ctx context.Context,
 	user := req.GetProfile()
 
 	data := ProfilePoliticalParty{
-		ID:                          user.GetId(),
 		ProfilePoliticalName:        user.GetProfilePoliticalName(),
 		ProfilePoliticalSigla:       user.GetProfilePoliticalSigla(),
 		ProfilePoliticalType:        user.GetProfilePoliticalType(),
@@ -29,8 +26,6 @@ func (handler *userDataHandler) CreateProfilePoliticalParty(ctx context.Context,
 		ProfilePoliticalYoutubeID:   user.GetProfilePoliticalYoutubeID(),
 		ProfilePoliticalTikTokID:    user.GetProfilePoliticalTikTokID(),
 	}
-
-	handler.app.DB.Get(&data.ID, "SELECT nextval('ProfilePoliticalParty_Profile_Political_Party_Id_seq')")
 
 	// Enqueue the request for create user
 
@@ -79,30 +74,7 @@ func (handler *userDataHandler) ReadProfilePoliticalPartyByID(ctx context.Contex
 
 	fmt.Println("MODE: PASSING USER ID....", userID)
 
-	// Try to get value from Cache
-	value, err := handler.app.Cache.getValue(userID)
 
-	if err == nil && len(value) != 0 {
-
-		// Create placeholder var for hold the data
-		jsonData := []byte(
-			value,
-		)
-		// Extract the data in json format
-		err := json.Unmarshal(jsonData, &userdata)
-
-		if err != nil {
-			return nil, status.Errorf(
-				codes.Internal,
-				fmt.Sprintf("INTERAL ERROR trying to Unmarshal cached data:... %v", err),
-			)
-		}
-
-		// Return the user data in ReadUser response format
-		return &profiles_pb.ReadProfilePoliticalPartyByIdResponse{
-			Profile: dataToprofilespb(userdata),
-		}, nil
-	}
 
 	// If value does not exist in Cache
 	// Read data from DB
@@ -113,17 +85,6 @@ func (handler *userDataHandler) ReadProfilePoliticalPartyByID(ctx context.Contex
 		)
 	}
 
-	// Set cache with Key/Values
-	response, _ := json.Marshal(userdata)
-
-	// Set JSON values to Cache
-	if err := handler.app.Cache.setValue(userID, response); err != nil {
-		return nil, status.Errorf(
-			codes.Internal,
-			fmt.Sprintf("INTERAL ERROR trying to set Value in Cache:... %v", err),
-		)
-
-	}
 
 	// Return Query in ReadUser response format
 	return &profiles_pb.ReadProfilePoliticalPartyByIdResponse{
@@ -164,17 +125,7 @@ func (handler *userDataHandler) UpdateProfilePoliticalParty(ctx context.Context,
 		}, nil
 	}
 
-	// Set cache with Key/Values
-	response, _ := json.Marshal(newuserdata)
 
-	// Set JSON values to Cache
-	if err := handler.app.Cache.setValue(user.ID, response); err != nil {
-		return nil, status.Errorf(
-			codes.Internal,
-			fmt.Sprintf("INTERAL ERROR trying to set Value in Cache:... %v", err),
-		)
-
-	}
 	return nil, status.Errorf(
 		codes.Internal,
 		fmt.Sprintf("Internal error: %v", err),
@@ -194,17 +145,6 @@ func (handler *userDataHandler) DeleteProfilePoliticalParty(ctx context.Context,
 			codes.Internal,
 			fmt.Sprintf("Internal error: %v", err),
 		)
-	}
-
-	// Delete  JSON values from Cache
-	if err := handler.app.Cache.deleteKey(user.ID); err != nil {
-		sentry.CaptureException(err)
-
-		return nil, status.Errorf(
-			codes.Internal,
-			fmt.Sprintf("INTERAL ERROR trying to DEKETE Value in Cache:... %v", err),
-		)
-
 	}
 
 	return &profiles_pb.DeleteProfilePoliticalPartyResponse{
@@ -286,9 +226,11 @@ func (handler *userDataHandler) ListProfilePoliticalPartyByType(req *profiles_pb
 // END List Users Domain
 
 func (a *App) getProfilePoliticalPartyFromDB(id int32) (ProfilePoliticalParty, error) {
-	user := ProfilePoliticalParty{ID: id}
+	user := ProfilePoliticalParty{
+		ID: id,
+	}
 
-	if err := user.getProfilePoliticalPartyByUserID(a.DB); err != nil {
+	if err := user.getPoliticalPartyByID(a.DB); err != nil {
 		switch err {
 		case sql.ErrNoRows:
 			return user, err

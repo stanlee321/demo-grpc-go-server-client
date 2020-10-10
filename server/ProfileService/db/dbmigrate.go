@@ -21,7 +21,7 @@ $$ LANGUAGE plpgsql;
 
 CREATE TABLE IF NOT EXISTS ProfilePoliticalParty
 (
-	Profile_Political_Party_Id 		BIGINT PRIMARY KEY,
+	Id 		SERIAL PRIMARY KEY,
 	Profile_Political_Name			TEXT NOT NULL,
 	Profile_Political_Sigla 		TEXT,
 	Profile_Political_Type			TEXT,
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS ProfilePoliticalParty
 	Profile_Political_TikTok_Id		BIGINT,
 
 	Created_at 				TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-	Updated_at 				TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+	Updated_at 				TIMESTAMPTZ NOT NULL DEFAULT NOW()
 
 );
 
@@ -44,7 +44,7 @@ EXECUTE PROCEDURE trigger_set_timestamp();
 
 CREATE TABLE IF NOT EXISTS ProfileStateOrganization
 (
-	Profile_State_Organization_Id	BIGINT PRIMARY KEY,
+	Id								SERIAL PRIMARY KEY,
 	Profile_Name					TEXT NOT NULL,
 	Profile_Sigla					TEXT,
 	Profile_Fase					TEXT,
@@ -55,18 +55,18 @@ CREATE TABLE IF NOT EXISTS ProfileStateOrganization
 	Profile_Youtube_Id				BIGINT,
 	Profile_TikTok_Id				BIGINT,
 	Created_at 				TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-	Updated_at 				TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+	Updated_at 				TIMESTAMPTZ NOT NULL DEFAULT NOW()
 
 );
 CREATE TRIGGER set_timestamp
-	BEFORE UPDATE ON ProfileMediosPeriodistas
+	BEFORE UPDATE ON ProfileStateOrganization
 	FOR EACH ROW
 EXECUTE PROCEDURE trigger_set_timestamp();
 
 
 CREATE TABLE IF NOT EXISTS ProfilePeople
 (
-	Profile_People_Id 				BIGINT PRIMARY KEY,
+	Id 								SERIAL PRIMARY KEY,
 	Profile_FirstName				TEXT NOT NULL,
 	Profile_LastName				TEXT,
 	Profile_Orientation				TEXT,
@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS ProfilePeople
 	Profile_TikTok_Id				BIGINT,
 	Profile_Kind 					TEXT NOT NULL,
 	Created_at 				TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-	Updated_at 				TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+	Updated_at 				TIMESTAMPTZ NOT NULL DEFAULT NOW()
 
 );
 CREATE TRIGGER set_timestamp

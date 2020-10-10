@@ -4,13 +4,11 @@ import (
 	profiles_pb "github.com/stanlee321/demo-grpc-go-server-client/proto"
 	"context"
 	"database/sql"
-	"encoding/json"
 	"fmt"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/getsentry/sentry-go"
 )
 
 func (handler *userDataHandler) CreateProfileStateOrganization(ctx context.Context, req *profiles_pb.CreateProfileStateOrganizationRequest) (*profiles_pb.CreateProfileStateOrganizationResponse, error) {
@@ -31,7 +29,6 @@ func (handler *userDataHandler) CreateProfileStateOrganization(ctx context.Conte
 		ProfileTikTokID:      user.GetProfileTikTokId(),
 	}
 
-	handler.app.DB.Get(&data.ID, "SELECT nextval('ProfileStateOrganization_Profile_State_Organization_Id_seq')")
 
 	// Enqueue the request for create user
 
@@ -79,17 +76,7 @@ func (handler *userDataHandler) ReadProfileStateOrganizationByID(ctx context.Con
 		)
 	}
 
-	// Set cache with Key/Values
-	response, _ := json.Marshal(userdata)
 
-	// Set JSON values to Cache
-	if err := handler.app.Cache.setValue(userID, response); err != nil {
-		return nil, status.Errorf(
-			codes.Internal,
-			fmt.Sprintf("INTERAL ERROR trying to set Value in Cache:... %v", err),
-		)
-
-	}
 
 	// Return Query in ReadUser response format
 	return &profiles_pb.ReadProfileStateOrganizationByIdResponse{
@@ -131,17 +118,6 @@ func (handler *userDataHandler) UpdateProfileStateOrganization(ctx context.Conte
 		}, nil
 	}
 
-	// Set cache with Key/Values
-	response, _ := json.Marshal(newuserdata)
-
-	// Set JSON values to Cache
-	if err := handler.app.Cache.setValue(user.ID, response); err != nil {
-		return nil, status.Errorf(
-			codes.Internal,
-			fmt.Sprintf("INTERAL ERROR trying to set Value in Cache:... %v", err),
-		)
-
-	}
 	return nil, status.Errorf(
 		codes.Internal,
 		fmt.Sprintf("Internal error: %v", err),
@@ -163,16 +139,7 @@ func (handler *userDataHandler) DeleteProfileStateOrganization(ctx context.Conte
 		)
 	}
 
-	// Delete  JSON values from Cache
-	if err := handler.app.Cache.deleteKey(user.ID); err != nil {
-		sentry.CaptureException(err)
 
-		return nil, status.Errorf(
-			codes.Internal,
-			fmt.Sprintf("INTERAL ERROR trying to DEKETE Value in Cache:... %v", err),
-		)
-
-	}
 
 	return &profiles_pb.DeleteProfileStateOrganizationResponse{
 		Id: id,
