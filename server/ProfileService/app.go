@@ -15,7 +15,7 @@ import (
 
 	"github.com/getsentry/sentry-go"
 
-	profiles_pb "../../protofiles"
+	profiles_pb "github.com/stanlee321/demo-grpc-go-server-client/proto"
 )
 
 // App is the struct with app configuration values

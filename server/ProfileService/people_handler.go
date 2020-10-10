@@ -1,7 +1,7 @@
 package main
 
 import (
-	profiles_pb "../../protofiles"
+	profiles_pb "github.com/stanlee321/demo-grpc-go-server-client/proto"
 	"context"
 	"database/sql"
 	"fmt"
